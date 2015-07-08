@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>测试</title>
+        <!--         <script src="http://echarts.baidu.com/build/dist/echarts.js"></script> -->
+        <script src="/static/source/echarts.js"> </script>
+        <script>
+         require.config({
+             paths: {
+                 echarts: '/static/source'
+             }
+         });
+        </script>
+    </head>
+
+    <body>
+        <h3>{{title}}</h3>
+        {% set i = 1 %}
+        {% for template in templates %}
+        {% if template.type == 'chart' %}
+        <p>
+            CHART {{i}}
+        </p>
+        <div id="chart_{{i}}" style="height:400px"></div>
+        <script type="text/javascript">
+            require([
+            'echarts',
+            'echarts/chart/bar',
+            'echarts/chart/line',
+            'echarts/chart/pie'
+            ],
+            function (ec) {
+            var myChart = ec.init(document.getElementById("chart_{{i}}"));
+            var option = {{template.option|safe}};
+            myChart.setOption(option);
+            });
+        </script>
+
+        {% set i = i + 1 %}
+        {% elif template.type == 'radio' %}
+        <p>
+            RADIO HERE!
+        </p>
+        {% elif template.type == 'date' %}
+        <p>
+            DATE HERE!
+        </p>
+        {% elif template.type == 'table' %}
+        <p>
+            TABLE HERE!
+        </p>
+        {% endif %}
+        {% endfor %}
+    </body>
+</html>
